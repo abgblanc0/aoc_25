@@ -35,25 +35,23 @@ fn check_around(pos: (usize, usize), matrix: &mut Vec<Vec<char>>) -> bool {
 pub fn solution(input: &str) {
   let mut matrix: Vec<Vec<char>> = input.lines().map(|line| line.chars().collect()).collect();
   let mut removed = 0;
+  let mut changed = true;
 
-  let mut i = 0;
-  while i < matrix.len() {
-    let mut j = 0;
-    while j < matrix[i].len() {
-      if matrix[i][j] == '@' && check_around((i, j), &mut matrix) {
-        removed += 1;
-        i = 0;
-        j = 0;
-        break;
-      } else {
+  while changed {
+    changed = false;
+    let mut i = 0;
+    while i < matrix.len() {
+      let mut j = 0;
+      while j < matrix[i].len() {
+        if matrix[i][j] == '@' && check_around((i, j), &mut matrix) {
+          removed += 1;
+          changed = true;
+        }
         j += 1;
       }
-    }
-    if j == matrix[i].len() {
       i += 1;
     }
   }
 
-  //matrix.iter().for_each(|row| println!("{}", row.iter().collect::<String>()));
   println!("Day 04 - Part 2 Solution: {removed}");
 }
