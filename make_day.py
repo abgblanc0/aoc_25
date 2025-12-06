@@ -13,7 +13,7 @@ pub fn solution() {{
 }}
 """
 
-TEMPLATE_PART = """pub fn solution(input: &str) {{
+TEMPLATE_PART = """pub fn solution(_input: &str) {{
   println!("Day {day} - Part X not implemented yet");
 }}
 """

@@ -4,5 +4,6 @@ fn main() {
   //days::day02::solution();
   //days::day03::solution();
   //days::day04::solution();
-  days::day05::solution();
+  //days::day05::solution();
+  days::day06::solution();
 }
