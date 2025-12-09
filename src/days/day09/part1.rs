@@ -1,17 +1,7 @@
-use std::fmt;
-
-
 #[derive(PartialEq, Clone, Copy)]
 struct Point {
   x: i64,
   y: i64
-}
-
-impl fmt::Display for Point {
-  fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
-    let _ = write!(fmt, "({}, {})", self.x, self.y);
-    Ok(())
-  }
 }
 
 fn get_area(point_a: &Point, point_b: &Point) -> i64 {
@@ -22,7 +12,7 @@ fn get_area(point_a: &Point, point_b: &Point) -> i64 {
 
 pub fn solution(input: &str) {
   let points: Vec<Point> = input.lines().map(|line| {
-    let (a, b ) =line.split_once(',').unwrap();
+    let (a, b) = line.split_once(',').unwrap();
     Point { x: a.parse().unwrap(), y: b.parse().unwrap() }
   }).collect();
   let mut areas: Vec<((Point, Point), i64)> = Vec::new();
@@ -36,6 +26,5 @@ pub fn solution(input: &str) {
   areas.sort_by(|(_, dist_a), (_, dist_b)| dist_a.cmp(dist_b).reverse());
 
   let area = areas.first().unwrap();
-  println!("{} {}", area.0.0, area.0.1);
   println!("Day 09 - Part 1 Solution: {}", area.1);
 }
