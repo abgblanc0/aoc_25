@@ -41,9 +41,10 @@ fn range_between(p1: Point, p2: Point) -> Vec<Point> {
   }
 }
 
-fn check_side(side: Vec<Point>, sides: &HashSet<Point>, inside: &mut HashSet<Point>) -> bool {
-  
-  for point in side.iter() {
+/* 
+fn check_side(range: (Point, Point)) -> bool {
+
+
     let mut ins: bool = false;
     let mut colitions: i32 = 0;
 
@@ -66,23 +67,18 @@ fn check_side(side: Vec<Point>, sides: &HashSet<Point>, inside: &mut HashSet<Poi
     else {
       return false;
     }
-  }
   true
 }
 
-fn draw_poligon(points: &Vec<Point>) -> (HashSet<Point>, HashSet<Point>) {
-  let mut poligon: HashSet<Point> = HashSet::new();
-  let mut sides: HashSet<Point> = HashSet::new();
+*/
+fn draw_poligon(points: &Vec<Point>, matrix: &mut Vec<Vec<char>>) {
 
   let a = points.first().unwrap();
   let b = points.last().unwrap();
-  let point_a = if a > b { b } else { a };
-  let point_b = if b > a { b } else { a };
 
-  for x in point_a.x..point_b.x {
-    for y in point_a.y..point_b.y {
-      poligon.insert(Point { x, y });
-      sides.insert(Point { x, y });
+  for x in a.x..=b.x {
+    for y in a.y..=b.y {
+      matrix[y as usize][x as usize] = 'X';
     }
   }
 
@@ -92,54 +88,29 @@ fn draw_poligon(points: &Vec<Point>) -> (HashSet<Point>, HashSet<Point>) {
 
     for x in point_a.x..=point_b.x {
       for y in point_a.y..=point_b.y {
-        poligon.insert(Point { x, y });
-        sides.insert(Point { x, y });
+        matrix[y as usize][x as usize] = 'X';
       }
     }
   });
-
-  (poligon, sides)
 }
 
 pub fn solution(input: &str) {
+  let mut max_x = i64::MIN;
+  let mut max_y = i64::MIN;
+
   let points: Vec<Point> = input.lines().map(|line| {
     let (a, b) = line.split_once(',').unwrap();
+    let x = a.parse().unwrap();
+    let y = b.parse().unwrap();
+    max_x = max_x.max(x);
+    max_y = max_y.max(y);
     Point { x: a.parse().unwrap(), y: b.parse().unwrap() }
   }).collect();
 
-  let (mut inside, sides) = draw_poligon(&points);
-  let mut areas: Vec<((Point, Point), i64)> = Vec::new();
+  let mut matrix: Vec<Vec<char>> = vec![vec!['.'; max_x as usize + 1]; max_y as usize + 1];
 
-  
-  for (i, point_a) in points.iter().enumerate() {
-    for point_b in points[i + 1 ..].iter() {
-      if 
-        check_side(
-          range_between(*point_a, Point { x: point_b.x, y: point_a.y }),
-          &sides,
-          &mut inside
-        ) &&
-        check_side(
-          range_between(*point_a, Point { x: point_a.x, y: point_b.y }),
-          &sides,
-          &mut inside
-        ) &&
-        check_side(
-          range_between(*point_b, Point { x: point_a.x, y: point_b.y }),
-          &sides,
-          &mut inside
-        ) &&
-        check_side(
-          range_between(*point_b, Point { x: point_b.x, y: point_a.y }),
-          &sides,
-          &mut inside
-        ) 
-      {
-        areas.push(((*point_a, *point_b), get_area(point_a, point_b)));
-      }
-    }
-  }
-  
-  areas.sort_by(|(_, dist_a), (_, dist_b)| dist_a.cmp(dist_b).reverse());
-  println!("Day 09 - Part 1 Solution: {}", areas.first().unwrap().1);
+  draw_poligon(&points, &mut matrix);
+
+  matrix.iter().for_each(|row| println!("{}", row.iter().collect::<String>()));
+
 }
