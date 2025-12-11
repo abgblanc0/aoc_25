@@ -1,4 +1,3 @@
-use std::collections::HashSet;
 use std::fmt;
 use std::cmp::Ordering;
 
@@ -18,26 +17,6 @@ impl fmt::Display for Point {
   fn fmt(&self, fmt: &mut fmt::Formatter) -> fmt::Result {
     let _ = write!(fmt, "({}, {})", self.x, self.y);
     Ok(())
-  }
-}
-
-fn get_area(point_a: &Point, point_b: &Point) -> i64 {
-  let side_a = (point_a.x - point_b.x).abs();
-  let side_b = (point_a.y - point_b.y).abs(); 
-  (side_a + 1) * (side_b + 1)
-}
-
-fn range_between(p1: Point, p2: Point) -> Vec<Point> {
-  if p1.x == p2.x {
-    let start = p1.y.min(p2.y);
-    let end = p1.y.max(p2.y);
-    (start..=end).map(|y| Point { x: p1.x, y }).collect()
-  } else if p1.y == p2.y {
-    let start = p1.x.min(p2.x);
-    let end = p1.x.max(p2.x);
-    (start..=end).map(|x| Point { x, y: p1.y }).collect()
-  } else {
-    vec![p1, p2]
   }
 }
 
